@@ -6,9 +6,11 @@ from interfaces import DataHandler
 class RawFileDataHandler(DataHandler):
     """
     Reads pkt-stats-cell-X.dat files
-    Provides:
-    - Loss series (for correlation)
-    - TX series (for capacity estimation)
+    Supports:
+    - Packet loss vectors
+    - DU throughput (TX side)
+    - RU throughput (RX side)
+    - get_tx_series() for backward compatibility
     """
 
     def __init__(self, data_dir):
@@ -26,13 +28,16 @@ class RawFileDataHandler(DataHandler):
     def get_cells(self):
         return self.cells
 
-    def get_loss_series(self, cell_id):
-        """
-        Normalized loss magnitude vector (for correlation)
-        """
+    # ---------------------------
+    # Internal file reader
+    # ---------------------------
+    def _read_file(self, cell_id):
         path = os.path.join(self.data_dir, f"pkt-stats-cell-{cell_id}.dat")
 
+        tx_series = []
+        rx_series = []
         loss_series = []
+
         with open(path, "r") as f:
             for line in f:
                 parts = line.strip().split()
@@ -47,34 +52,38 @@ class RawFileDataHandler(DataHandler):
                     continue
 
                 loss = max(0.0, tx - rx + late)
-                loss_series.append(loss)
-
-        series = np.array(loss_series, dtype=float)
-
-        # Normalize for stable correlation
-        if series.size > 0 and series.max() > 0:
-            series = series / series.max()
-
-        return series
-
-    def get_tx_series(self, cell_id):
-        """
-        Transmitted packets per time slot (for capacity estimation)
-        """
-        path = os.path.join(self.data_dir, f"pkt-stats-cell-{cell_id}.dat")
-
-        tx_series = []
-        with open(path, "r") as f:
-            for line in f:
-                parts = line.strip().split()
-                if len(parts) < 2:
-                    continue
-
-                try:
-                    tx = float(parts[1])
-                except ValueError:
-                    continue
 
                 tx_series.append(tx)
+                rx_series.append(rx)
+                loss_series.append(1.0 if loss > 0 else 0.0)
 
-        return np.array(tx_series, dtype=float)
+        return (
+            np.array(tx_series, dtype=float),
+            np.array(rx_series, dtype=float),
+            np.array(loss_series, dtype=float),
+        )
+
+    # ---------------------------
+    # Interface Methods
+    # ---------------------------
+    def get_loss_series(self, cell_id):
+        _, _, loss = self._read_file(cell_id)
+        return loss
+
+    def get_du_throughput(self, cell_id):
+        tx, _, _ = self._read_file(cell_id)
+        return tx
+
+    def get_ru_throughput(self, cell_id):
+        _, rx, _ = self._read_file(cell_id)
+        return rx
+
+    # ---------------------------
+    # Compatibility Method
+    # ---------------------------
+    def get_tx_series(self, cell_id):
+        """
+        Backward compatibility for older estimators:
+        TX = DU throughput
+        """
+        return self.get_du_throughput(cell_id)

@@ -16,14 +16,16 @@ from clustering_engine import ClusteringEngine
 from confidence import compute_confidence
 from visualization import Visualizer
 from exporter import export_topology
-from capacity_estimator import LinkCapacityEstimator
+
+# Nokia Challenge 2 Engine
+from dual_capture_capacity_estimator import DualCaptureCapacityEstimator
 
 
 # ===============================
 # CONFIG: Switch data source
 # ===============================
-DATA_MODE = "raw"  
-# Change to: "processed" when teammate finishes cleaned CSV pipeline
+DATA_MODE = "raw"
+# Change to "processed" when teammate finishes CSV pipeline
 
 
 def main():
@@ -31,7 +33,9 @@ def main():
     print("🔧 Mode:", DATA_MODE.upper())
     print("🎚️ Correlation Threshold:", CORRELATION_THRESHOLD, "\n")
 
+    # -------------------------------
     # Ensure output directory exists
+    # -------------------------------
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     # -------------------------------
@@ -60,7 +64,7 @@ def main():
     print("🧠 Building behavior fingerprints...")
     vectors = LossVectorBuilder(handler).build()
 
-    # Save for debugging / ML
+    # Save for debugging / ML teammate
     np.save(os.path.join(OUTPUT_DIR, "loss_vectors.npy"), vectors)
 
     # -------------------------------
@@ -85,10 +89,10 @@ def main():
     confidences = compute_confidence(link_map, corr_df)
 
     # -------------------------------
-    # Capacity estimation (TX-based)
+    # Capacity estimation (DU/RU MODEL)
     # -------------------------------
-    print("📡 Estimating Ethernet link capacity...")
-    capacity_engine = LinkCapacityEstimator()
+    print("📡 Estimating Ethernet link capacity (dual capture model)...")
+    capacity_engine = DualCaptureCapacityEstimator()
     capacity_map = capacity_engine.estimate(link_map, handler)
 
     # -------------------------------
@@ -131,10 +135,13 @@ def main():
     for link, group in link_map.items():
         conf = confidences.get(link, 0.0)
         cap = capacity_map.get(link, {})
+
         print(
             f"{link}: {group} | "
             f"confidence={conf:.2f} | "
-            f"safe_capacity={cap.get('safe_gbps', 0)} Gbps"
+            f"peak={cap.get('peak_demand_gbps', 0)} Gbps | "
+            f"safe_capacity={cap.get('safe_capacity_gbps', 0)} Gbps | "
+            f"congestion={cap.get('congestion_score', 0)}"
         )
 
     print(f"\n🧾 Frontend JSON saved to: {OUTPUT_DIR}/topology.json")
