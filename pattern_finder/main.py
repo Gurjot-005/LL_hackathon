@@ -29,8 +29,10 @@ def main(dataset_mode="raw"):
     # Choose data source
     if dataset_mode == "processed":
         handler = CleanedCSVFolderHandler(PROCESSED_DATA_PATH)
+        dataset_label = "processed"
     else:
         handler = RawFileDataHandler(DATA_PATH)
+        dataset_label = "raw"
 
     cells = handler.get_cells()
     print(f"Found {len(cells)} cells")
@@ -62,8 +64,17 @@ def main(dataset_mode="raw"):
     issues = LinkValidator().validate(link_map)
 
     # Visualization
+    viz = Visualizer()
+
     print("🎨 Generating heatmap...")
-    Visualizer().save_heatmap(corr_df, f"{OUTPUT_DIR}/heatmap.png")
+    viz.save_heatmap(corr_df, f"{OUTPUT_DIR}/heatmap.png")
+
+    print("🕸️ Generating topology graph...")
+    viz.save_topology_graph(
+        link_map,
+        confidences,
+        f"{OUTPUT_DIR}/topology_graph.png"
+    )
 
     # Export
     print("💾 Exporting topology...")
@@ -72,7 +83,7 @@ def main(dataset_mode="raw"):
         link_map,
         confidences,
         CORRELATION_THRESHOLD,
-        dataset_mode,
+        dataset_label,
         len(cells)
     )
 
