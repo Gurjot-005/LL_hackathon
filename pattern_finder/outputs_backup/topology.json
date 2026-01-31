@@ -1,0 +1,176 @@
+{
+  "generated_at": "2026-01-31T13:44:24.065016Z",
+  "dataset": "raw",
+  "threshold": 0.85,
+  "cell_count": 24,
+  "links": [
+    {
+      "id": "Link_17",
+      "cells": [
+        "1"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_22",
+      "cells": [
+        "2"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_24",
+      "cells": [
+        "3"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_18",
+      "cells": [
+        "4"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_19",
+      "cells": [
+        "5"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_20",
+      "cells": [
+        "6"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_9",
+      "cells": [
+        "7"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_23",
+      "cells": [
+        "8"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_13",
+      "cells": [
+        "9"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_16",
+      "cells": [
+        "10"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_14",
+      "cells": [
+        "11"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_15",
+      "cells": [
+        "12"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_11",
+      "cells": [
+        "13"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_21",
+      "cells": [
+        "14"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_12",
+      "cells": [
+        "15"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_10",
+      "cells": [
+        "16"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_7",
+      "cells": [
+        "17"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_6",
+      "cells": [
+        "18"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_8",
+      "cells": [
+        "19"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_5",
+      "cells": [
+        "20"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_3",
+      "cells": [
+        "21"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_4",
+      "cells": [
+        "22"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_2",
+      "cells": [
+        "23"
+      ],
+      "confidence": 0.0
+    },
+    {
+      "id": "Link_1",
+      "cells": [
+        "24"
+      ],
+      "confidence": 0.0
+    }
+  ]
+}

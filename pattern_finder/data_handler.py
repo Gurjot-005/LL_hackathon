@@ -1,5 +1,3 @@
-# data_handler.py
-
 import os
 import numpy as np
 from interfaces import DataHandler
@@ -8,7 +6,9 @@ from interfaces import DataHandler
 class RawFileDataHandler(DataHandler):
     """
     Reads pkt-stats-cell-X.dat files
-    Converts them into binary packet loss vectors
+    Provides:
+    - Loss series (for correlation)
+    - TX series (for capacity estimation)
     """
 
     def __init__(self, data_dir):
@@ -27,6 +27,9 @@ class RawFileDataHandler(DataHandler):
         return self.cells
 
     def get_loss_series(self, cell_id):
+        """
+        Normalized loss magnitude vector (for correlation)
+        """
         path = os.path.join(self.data_dir, f"pkt-stats-cell-{cell_id}.dat")
 
         loss_series = []
@@ -37,13 +40,41 @@ class RawFileDataHandler(DataHandler):
                     continue
 
                 try:
-                    tx = int(parts[1])
-                    rx = int(parts[2])
-                    late = int(parts[3])
+                    tx = float(parts[1])
+                    rx = float(parts[2])
+                    late = float(parts[3])
                 except ValueError:
                     continue
 
-                loss = max(0, tx - rx + late)
-                loss_series.append(1 if loss > 0 else 0)
+                loss = max(0.0, tx - rx + late)
+                loss_series.append(loss)
 
-        return np.array(loss_series, dtype=float)
+        series = np.array(loss_series, dtype=float)
+
+        # Normalize for stable correlation
+        if series.size > 0 and series.max() > 0:
+            series = series / series.max()
+
+        return series
+
+    def get_tx_series(self, cell_id):
+        """
+        Transmitted packets per time slot (for capacity estimation)
+        """
+        path = os.path.join(self.data_dir, f"pkt-stats-cell-{cell_id}.dat")
+
+        tx_series = []
+        with open(path, "r") as f:
+            for line in f:
+                parts = line.strip().split()
+                if len(parts) < 2:
+                    continue
+
+                try:
+                    tx = float(parts[1])
+                except ValueError:
+                    continue
+
+                tx_series.append(tx)
+
+        return np.array(tx_series, dtype=float)

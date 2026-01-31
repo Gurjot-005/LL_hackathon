@@ -1,0 +1,30 @@
+Nokia Fronthaul Topology Summary
+--------------------------------
+Dataset mode: raw
+Cells analyzed: 24
+Similarity threshold (cosine): 0.85
+
+Link_17 | confidence=0.00 | cells=['1']
+Link_22 | confidence=0.00 | cells=['2']
+Link_24 | confidence=0.00 | cells=['3']
+Link_18 | confidence=0.00 | cells=['4']
+Link_19 | confidence=0.00 | cells=['5']
+Link_20 | confidence=0.00 | cells=['6']
+Link_9 | confidence=0.00 | cells=['7']
+Link_23 | confidence=0.00 | cells=['8']
+Link_13 | confidence=0.00 | cells=['9']
+Link_16 | confidence=0.00 | cells=['10']
+Link_14 | confidence=0.00 | cells=['11']
+Link_15 | confidence=0.00 | cells=['12']
+Link_11 | confidence=0.00 | cells=['13']
+Link_21 | confidence=0.00 | cells=['14']
+Link_12 | confidence=0.00 | cells=['15']
+Link_10 | confidence=0.00 | cells=['16']
+Link_7 | confidence=0.00 | cells=['17']
+Link_6 | confidence=0.00 | cells=['18']
+Link_8 | confidence=0.00 | cells=['19']
+Link_5 | confidence=0.00 | cells=['20']
+Link_3 | confidence=0.00 | cells=['21']
+Link_4 | confidence=0.00 | cells=['22']
+Link_2 | confidence=0.00 | cells=['23']
+Link_1 | confidence=0.00 | cells=['24']
